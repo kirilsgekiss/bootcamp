@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Calculation:scenario xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Calculation="http://www.sap.com/ndb/BiModelCalculation.ecore" id="CV_INVESTED_AMOUNTS" applyPrivilegeType="NONE" dataCategory="CUBE" schemaVersion="3.0" outputViewType="Aggregation" cacheInvalidationPeriod="NONE" enforceSqlExecution="false">
+<descriptions defaultDescription="CV_INVESTED_AMOUNTS"/>
+<localVariables/>
+<variableMappings/>
+<dataSources>
+  <DataSource id="Groups">
+    <resourceUri>Groups</resourceUri>
+  </DataSource>
+  <DataSource id="Investors">
+    <resourceUri>Investors</resourceUri>
+  </DataSource>
+</dataSources>
+<calculationViews>
+  <calculationView xsi:type="Calculation:JoinView" id="Join_1" cardinality="C1_N" joinType="inner">
+    <viewAttributes>
+      <viewAttribute id="CONTINENT">
+        <descriptions defaultDescription="Continent"/>
+      </viewAttribute>
+      <viewAttribute id="GROUP_NAME">
+        <descriptions defaultDescription="Group name"/>
+      </viewAttribute>
+      <viewAttribute id="INVESTING_AMOUNT" aggregationType="sum">
+        <descriptions defaultDescription="Rating"/>
+      </viewAttribute>
+    </viewAttributes>
+    <calculatedViewAttributes/>
+    <restrictedViewAttributes/>
+    <input node="Groups">
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONTINENT" source="CONTINENT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="GROUP_NAME" source="GROUP_NAME"/>
+    </input>
+    <input node="Investors">
+      <mapping xsi:type="Calculation:AttributeMapping" target="INVESTING_AMOUNT" source="INVESTING_AMOUNT"/>
+      <mapping xsi:type="Calculation:AttributeMapping" target="CONTINENT" source="CONTINENT"/>
+    </input>
+    <joinAttribute name="CONTINENT"/>
+  </calculationView>
+</calculationViews>
+<logicalModel id="Join_1">
+  <attributes>
+    <attribute id="CONTINENT" order="1" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Continent"/>
+      <keyMapping columnObjectName="Join_1" columnName="CONTINENT"/>
+    </attribute>
+    <attribute id="GROUP_NAME" order="2" displayAttribute="false" attributeHierarchyActive="false">
+      <descriptions defaultDescription="Group name"/>
+      <keyMapping columnObjectName="Join_1" columnName="GROUP_NAME"/>
+    </attribute>
+  </attributes>
+  <calculatedAttributes/>
+  <baseMeasures>
+    <measure id="INVESTING_AMOUNT" order="3" aggregationType="sum" measureType="simple">
+      <descriptions defaultDescription="Rating"/>
+      <measureMapping columnObjectName="Join_1" columnName="INVESTING_AMOUNT"/>
+    </measure>
+  </baseMeasures>
+  <calculatedMeasures/>
+  <restrictedMeasures/>
+  <localDimensions/>
+</logicalModel>
+<layout>
+  <shapes>
+    <shape expanded="true" modelObjectName="Output" modelObjectNameSpace="MeasureGroup">
+      <upperLeftCorner x="40" y="85"/>
+    </shape>
+  
+    <shape expanded="true" modelObjectName="Join_1" modelObjectNameSpace="CalculationView">
+      <upperLeftCorner x="100" y="199"/>
+      <rectangleSize height="30" width="160"/>
+    </shape>
+    <shape modelObjectName="Groups" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="20" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+    <shape modelObjectName="Investors" modelObjectNameSpace="Join_1" modelObjectType="JoinNodeInput">
+      <upperLeftCorner x="320" y="30"/>
+      <rectangleSize width="250"/>
+    </shape>
+  </shapes>
+</layout>
+</Calculation:scenario>

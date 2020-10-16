@@ -1,0 +1,17 @@
+PROCEDURE "Exercise4" ()
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+	AS
+BEGIN
+	DECLARE records INT := 0;
+	SELECT COUNT(*)
+		INTO records
+		FROM "Log"
+		WHERE "USERNAME" = CURRENT_USER;
+	if :records = 0
+		then insert into "Log" values(current_user, current_timestamp);
+		else update "Log"
+			set "DATE" = current_timestamp
+			where "USERNAME" = current_user;
+	end if;
+END

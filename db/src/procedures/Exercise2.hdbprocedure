@@ -1,0 +1,30 @@
+PROCEDURE "Exercise2" (
+	IN investment DECIMAL(15,2),
+	OUT ResultTable TABLE(
+		Amount DECIMAL(15,2),
+		EmailAddress NVARCHAR(40),
+		Title NVARCHAR(40)
+	)
+)
+	LANGUAGE SQLSCRIPT
+	SQL SECURITY INVOKER
+	READS SQL DATA AS
+BEGIN
+	DECLARE Email_Title NVARCHAR(3);
+	Email_Title = 'Mx.';
+	Investors =
+	SELECT
+		INV.Full_name,
+		INV.EMAIL as EmailAddress,
+		SUBSTRING(INV.FULL_NAME, 1, LOCATE(INV.FULL_NAME ,' ')-1) as FirstName,
+		SUBSTRING(INV.FULL_NAME, LOCATE(INV.FULL_NAME ,' ') + 1, LENGTH(INV.FULL_NAME)) AS LastName,
+		INV.INVESTING_AMOUNT AS Amount
+	FROM "Investors" INV
+	WHERE "INVESTING_AMOUNT" > :investment;
+	ResultTable =
+	SELECT
+		Amount,
+		EmailAddress,
+		CONCAT(Email_Title, LastName) AS Title
+	FROM :Investors;
+END

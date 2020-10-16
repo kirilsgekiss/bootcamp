@@ -1,0 +1,22 @@
+FUNCTION "Exercise3"(
+	IN im_continent NVARCHAR(20),
+	IN im_investment DECIMAL(15,2)
+)
+	RETURNS FinalInvestment DECIMAL(15,2)
+	LANGUAGE SQLSCRIPT 
+	SQL SECURITY INVOKER AS 
+BEGIN 
+	Declare TaxAmount DECIMAL(7,2) :=0;
+	IF :im_continent = 'Europe'
+		THEN TaxAmount = 0.01;
+	ELSEIF :im_continent = 'Asia'
+		THEN TaxAmount = 0.02;
+	ELSEIF :im_continent = 'North America'
+		THEN TaxAmount = 0.03;
+	ELSEIF :im_continent = 'South America'
+		THEN TaxAmount = 0.04;
+	ELSE
+		TaxAmount = 0.05;
+	END if;
+	FinalInvestment = :im_investment * (1 - :TaxAmount);
+END;

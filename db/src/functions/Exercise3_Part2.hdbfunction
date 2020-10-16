@@ -1,0 +1,28 @@
+FUNCTION "Exercise3_Part2"(
+	InvestedAmount DECIMAL(15,2)
+)
+	RETURNS TABLE(
+    	"InvestorName" NVARCHAR(80),
+    	"Continent" NVARCHAR(20),
+    	"GroupName" NVARCHAR(20),
+    	"InvestedAmount" DECIMAL(15,2),
+    	"FinalInvestment" DECIMAL(15,2),
+    	"Percent" DECIMAL(15,2)
+       ) 
+    LANGUAGE SQLSCRIPT 
+    SQL SECURITY INVOKER AS 
+BEGIN 
+	GName = SELECT a."CONTINENT", b."GROUP_NAME", a."FULL_NAME", a."INVESTING_AMOUNT"
+	FROM "Investors" AS a
+	INNER JOIN "Groups" AS b ON a."CONTINENT" = b."CONTINENT"
+	WHERE "INVESTING_AMOUNT" > :InvestedAmount;
+	RETURN 
+		SELECT "FULL_NAME" as "InvestorName",
+			"CONTINENT" as "Continent",
+			"GROUP_NAME"as "GroupName",
+			"INVESTING_AMOUNT" as "InvestedAmount",			
+			"Exercise3"("CONTINENT", "INVESTING_AMOUNT") AS "FinalInvestment",
+			"Exercise3"("CONTINENT", "INVESTING_AMOUNT")/"INVESTING_AMOUNT" * 100 AS "Percent"
+--			"INVESTING_AMOUNT" as "FinalInvestment"
+		FROM :GName;
+END;
